@@ -1,8 +1,9 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 
 const StudyContext = createContext()
+const STORAGE_KEY = 'study-planner-sessions'
 
-// Seed data
+// Initial seed data for demonstration
 const seedData = [
   {
     id: '1',
@@ -46,11 +47,9 @@ const seedData = [
   },
 ]
 
-const STORAGE_KEY = 'study-planner-sessions'
-
 export function StudyProvider({ children }) {
+  // Initialize state from localStorage or use seed data
   const [sessions, setSessions] = useState(() => {
-    // Load from localStorage on initial mount
     const stored = localStorage.getItem(STORAGE_KEY)
     if (stored) {
       try {
@@ -63,7 +62,7 @@ export function StudyProvider({ children }) {
     return seedData
   })
 
-  // Persist to localStorage whenever sessions change
+  // Persist sessions to localStorage on every change
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(sessions))
   }, [sessions])
